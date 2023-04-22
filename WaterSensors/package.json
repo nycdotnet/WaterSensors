@@ -1,0 +1,12 @@
+{
+  "name": "watersensors",
+  "version": "0.0.1",
+  "description": "An synthetic IoT sensor API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "perf": "k6 run LoadTesting/loadtest.js"
+  },
+  "author": "Steve Ognibene",
+  "license": "MIT"
+}
