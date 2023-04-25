@@ -13,6 +13,7 @@
         /// </summary>
         public float? Pressure { get; init; }
         public float? pH { get; init; }
-
+        public float? Latitude { get; init; }
+        public float? Longitude { get; init; }
     }
 }

@@ -31,8 +31,8 @@ namespace WaterSensors.Controllers
         }
 
         private const string InsertReadingSql = """
-            INSERT INTO public.reading (sensor_id, timestamp, temperature, pressure, ph)
-            VALUES (@SensorId, @Timestamp, @Temperature, @Pressure, @pH);
+            INSERT INTO public.reading (sensor_id, timestamp, temperature, pressure, ph, latitude, longitude)
+            VALUES (@SensorId, @Timestamp, @Temperature, @Pressure, @pH, @Latitude, @Longitude);
             """;
     }
 }

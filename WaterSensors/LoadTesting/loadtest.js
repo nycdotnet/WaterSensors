@@ -30,7 +30,9 @@ const generateReadingJson = () => JSON.stringify({
     timestamp: new Date(),
     temperature: randomBetween(45, 65),
     pressure: randomBetween(20, 90),
-    pH: randomBetween(5, 9)
+    pH: randomBetween(5, 9),
+    latitude: randomBetween(-89.99, 90),
+    longitude: randomBetween(-179.99, 180)
 });
 
 const randomBetween = (min, max) => ((Math.random() * (max + 1 - min)) + min).toFixed(2);
