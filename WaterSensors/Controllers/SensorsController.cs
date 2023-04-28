@@ -15,24 +15,49 @@ namespace WaterSensors.Controllers
             this.dbProvider = dbProvider;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<SensorReading>> GetHistory([FromQuery] GetHistoryQuery request)
+        [HttpGet("{SensorId}")]
+        public async Task<IEnumerable<SensorReading>> GetHistory(string SensorId, [FromQuery] GetHistoryQuery request)
         {
-            request.Validate();
-
             using var conn = dbProvider.GetConnection();
 
             var sql = $"""
-                {GetSensoryHistorySqlBase}
+                {GetSensorHistorySqlBase}
                 {(request.AtOrAfter.HasValue ? " AND timestamp >= @AtOrAfter" : "")}
                 {(request.Before.HasValue ? " AND timestamp <= @Before" : "")}
                 ORDER BY timestamp DESC
                 {(request.Count.HasValue ? " LIMIT @Count" : " LIMIT 100")};
                 """;
-            return await conn.QueryAsync<SensorReading>(sql, request);
+            return await conn.QueryAsync<SensorReading>(sql, request with { SensorId = SensorId });
         }
 
-        private const string GetSensoryHistorySqlBase = """
+        [HttpGet]
+        public async Task<IEnumerable<SensorReading>> GetCurrent()
+        {
+            using var conn = dbProvider.GetConnection();
+            var currentReadings = await conn.QueryAsync<SensorReading>(
+                GetCurrentSql, new { Timestamp = DateTime.UtcNow.AddSeconds(-30) });
+
+            return currentReadings
+                .GroupBy(r => r.SensorId)
+                .Select(g => new SensorReading {
+                    SensorId = g.Key,
+                    Timestamp = g.Max(x => x.Timestamp),
+                    Temperature = g.Average(x => x.Temperature),
+                    Pressure = g.Average(x => x.Pressure),
+                    pH = g.Average(x => x.pH),
+                    Latitude = g.Average(x => x.Latitude),
+                    Longitude = g.Average(x => x.Longitude)
+                });
+        }
+
+        private const string GetCurrentSql = """
+            SELECT sensor_id as SensorId, timestamp, temperature, pressure, ph, latitude, longitude
+            FROM public.reading
+            WHERE timestamp > @Timestamp
+            LIMIT 1000
+            """;
+
+        private const string GetSensorHistorySqlBase = """
             SELECT sensor_id as SensorId, timestamp, temperature, pressure, pH, latitude, longitude
             FROM public.reading WHERE sensor_id = @SensorId
             """;
@@ -43,14 +68,6 @@ namespace WaterSensors.Controllers
             public DateTimeOffset? AtOrAfter { get; init; }
             public DateTimeOffset? Before { get; init; }
             public int? Count { get; init; }
-
-            public void Validate()
-            {
-                if (string.IsNullOrEmpty(SensorId))
-                {
-                    throw new ArgumentNullException("SensorId is required.");
-                }
-            }
         }
     }
 }

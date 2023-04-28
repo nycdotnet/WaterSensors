@@ -9,7 +9,6 @@ namespace WaterSensors
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             builder.Services.AddScoped<Db>();
 
@@ -27,10 +26,7 @@ namespace WaterSensors
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();
