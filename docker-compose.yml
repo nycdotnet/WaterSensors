@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:15
-    command: -c 'max_connections=200'
+    command: -c 'max_connections=250'
     environment:
       POSTGRES_PASSWORD: "W@t#rSens0rs"
       POSTGRES_DB: water-sensors
@@ -13,7 +13,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: psql -U postgres -c 'select 1'
-      interval: 1s
+      interval: 10s
       timeout: 1s
       retries: 20
   flyway:

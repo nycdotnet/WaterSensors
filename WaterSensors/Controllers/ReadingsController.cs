@@ -9,25 +9,18 @@ namespace WaterSensors.Controllers
     [Route("[controller]")]
     public class ReadingsController : ControllerBase
     {
-        private readonly ILogger<ReadingsController> _logger;
         private readonly Db dbProvider;
 
-        public ReadingsController(
-            ILogger<ReadingsController> logger,
-            Db dbProvider
-            )
+        public ReadingsController(Db dbProvider)
         {
-            _logger = logger;
             this.dbProvider = dbProvider;
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task PostReading([FromBody] SensorReading reading)
         {
-            using (var conn = dbProvider.GetConnection())
-            {
-                await conn.ExecuteAsync(InsertReadingSql, reading);
-            }
+            using var conn = dbProvider.GetConnection();
+            await conn.ExecuteAsync(InsertReadingSql, reading);
         }
 
         private const string InsertReadingSql = """

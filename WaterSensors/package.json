@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "perf": "k6 run LoadTesting/loadtest.js"
+    "perf:ingest": "k6 run -e SCENARIO=ingestLoadTest LoadTesting/loadtest.js",
+    "perf:timeline": "k6 run -e SCENARIO=sensorTimelineLoadTest LoadTesting/loadtest.js",
+    "api": "dotnet run --configuration Release --launch-profile https"
   },
   "author": "Steve Ognibene",
   "license": "MIT"

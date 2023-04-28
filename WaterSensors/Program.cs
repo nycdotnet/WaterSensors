@@ -11,7 +11,7 @@ namespace WaterSensors
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.Add(new ServiceDescriptor(typeof(Db), typeof(Db), ServiceLifetime.Scoped));
+            builder.Services.AddScoped<Db>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
