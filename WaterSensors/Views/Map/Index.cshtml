@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Index1";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <h2>Map Index</h2>
+        Welcome to the Water Sensor Map!
+        <canvas id="water_sensor_map_canvas" width="640" height="480">
+            <div>Water sensor content here</div>
+        </canvas>
+    </div>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+    <script src="watersensorsapp.js" type="text/javascript"></script>
+</body>
+</html>

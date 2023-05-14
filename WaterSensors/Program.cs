@@ -9,7 +9,7 @@ namespace WaterSensors
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<Db>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -28,6 +28,7 @@ namespace WaterSensors
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
+            app.UseStaticFiles();
 
             app.Run();
         }
